@@ -33,12 +33,12 @@ const hash = bcrypt.hashSync(req.body.password, 10);
 });
 
 router.post('/singin', (req,res) => {
-  if (!checkBody(req.body, ['username', 'password'])) {
+  if (!checkBody(req.body, ['email', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
 
-  User.findOne({ username: req.body.username }).then(data => {
+  User.findOne({ email: req.body.email }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) { //bcrypt.compareSync sert à comparer le mdp crypté avec celui rentré en dur lors de la connexion
       res.json({ result: true, token: data.token });
     } else {
