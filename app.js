@@ -1,7 +1,5 @@
 require('dotenv').config();
 require('./models/connection');
-const User = require ('./models/users');
-const Animal = require ('./models/animals');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
