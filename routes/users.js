@@ -6,7 +6,7 @@ const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
 
 /* GET users listing. */
-router.post('/singup', (req,res) => {
+router.post('/signup', (req,res) => {
   if (!checkBody(req.body, ['email','password', 'birthday'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
@@ -32,7 +32,7 @@ const hash = bcrypt.hashSync(req.body.password, 10);
   });
 });
 
-router.post('/singin', (req,res) => {
+router.post('/signin', (req,res) => {
   if (!checkBody(req.body, ['email', 'password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
