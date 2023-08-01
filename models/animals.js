@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 
 const animalsSchema = mongoose.Schema({
+user: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
 type: String,
 nom: String,
 photo: String,
