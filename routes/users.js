@@ -47,6 +47,26 @@ router.post('/signin', (req,res) => {
   });
 });
 
+router.post('/:token', (req,res) => {
+  if(!checkBody(req.body, ['nom', 'prenom', 'pseudo', 'adresse'])){
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+  User.updateOne(
+    {token: req.params.token},
+  
+      {nom: req.body.nom, prenom: req.body.prenom, pseudo: req.body.pseudo, adresse: req.body.adresse}
+   
+    )
+    .then(() => {
+ 
+      User.find().then(data => {
+        console.log(data);
+      });
+  })
+
+})
+
 
 
 
