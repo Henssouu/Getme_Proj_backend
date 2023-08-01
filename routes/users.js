@@ -59,13 +59,10 @@ router.post('/:token', (req,res) => {
    
     )
     .then(() => {
- 
-      User.find().then(data => {
-        console.log(data);
-      });
-  })
+      res.json({result : true})
 
-})
+      });
+  });
 
 
 
