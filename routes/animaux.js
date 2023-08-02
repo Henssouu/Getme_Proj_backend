@@ -38,16 +38,9 @@ router.post('/newanimal', (req,res) => {
                  User.updateOne(
                     { token: userToken },
                     { $push: {animal: animalId } },
-                 ).then(data => { console.log("apres update", data)})
+                 ).then(data => { console.log("apres update", data)}) // 
                 res.json({ result: true, animal: data });
-                // User.updateOne(
-                //     {token: req.params.token},
-                  
-                //       {animal: data.animal}
-                   
-                //     )
-            
-                
+               
                       });
               });
               
