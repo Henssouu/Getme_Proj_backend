@@ -40,7 +40,7 @@ router.post('/signin', (req,res) => {
 
   User.findOne({ email: req.body.email }).then(data => {
     if (data && bcrypt.compareSync(req.body.password, data.password)) { //bcrypt.compareSync sert à comparer le mdp crypté avec celui rentré en dur lors de la connexion
-      res.json({ result: true, token: data.token });
+      res.json({ result: true, user: data });
     } else {
       res.json({ result: false, error: 'User not found or wrong password' });
     }
