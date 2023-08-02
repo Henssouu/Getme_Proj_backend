@@ -24,6 +24,21 @@ router.post('/newanimal', (req,res) => {
                 description: req.body.description,     
               });
               newAnimal.save().then((data) => {
+                // Récupérez l'ID de l'animal nouvellement créé
+                const animalId = data._id;
+                console.log('id animal', animalId)
+
+
+                // Récupérer le token de la collection user
+                 const userToken = req.body.token;
+                 console.log('token', userToken)
+
+                 // Mettre à jour le modèle User avec l'ID de l'animal nouvellement créé
+                 
+                 User.updateOne(
+                    { token: userToken },
+                    { $push: {animal: animalId } },
+                 ).then(data => { console.log("apres update", data)})
                 res.json({ result: true, animal: data });
                 // User.updateOne(
                 //     {token: req.params.token},
@@ -31,8 +46,7 @@ router.post('/newanimal', (req,res) => {
                 //       {animal: data.animal}
                    
                 //     )
-               
-                      res.json({result : true})
+            
                 
                       });
               });
