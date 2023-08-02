@@ -6,7 +6,7 @@ const {checkBody} = require("../modules/checkBody");
 
 /* GET home page. */
 router.post('/newanimal', (req,res) => {
-        if (!checkBody(req.body, ['nom','type', 'taille', 'couleur', 'poil', 'sex', 'castré', 'tatouage', 'puce'])) {
+        if (!checkBody(req.body, ['nom','type', 'taille', 'couleur', 'poil', 'sexe', 'castré', 'tatouage', 'puce'])) {
           res.json({ result: false, error: 'Missing or empty fields' });
           return;
         }
@@ -17,7 +17,7 @@ router.post('/newanimal', (req,res) => {
                 birthday: req.body.birthday,
                 couleur: req.body.couleur,
                 poil: req.body.poil,
-                sex: req.body.sex,
+                sexe: req.body.sexe,
                 castré: req.body.castré,
                 tatouage: req.body.tatouage,
                 puce: req.body.puce,
