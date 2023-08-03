@@ -13,7 +13,6 @@ sexe: String,
 castré: String,
 tatouage: String,
 puce: String,
-birthday: Date,
 description: String,
 
 
