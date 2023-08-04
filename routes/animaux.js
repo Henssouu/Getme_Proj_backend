@@ -14,7 +14,6 @@ router.post('/newanimal', (req,res) => {
                 nom: req.body.nom,
                 type: req.body.type,
                 taille: req.body.taille,
-                birthday: req.body.birthday,
                 couleur: req.body.couleur,
                 poil: req.body.poil,
                 sexe: req.body.sexe,

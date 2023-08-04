@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 
 /* GET users listing. */
 router.post('/signup', (req,res) => {
-  if (!checkBody(req.body, ['email','password', 'birthday'])) {
+  if (!checkBody(req.body, ['email','password'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
     return;
   }
@@ -18,7 +18,6 @@ const hash = bcrypt.hashSync(req.body.password, 10);
       const newUser = new User({
         email: req.body.email,
         password: hash,
-        birthday: req.body.birthday,
         token: uid2(32),
         
       });
