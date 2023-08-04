@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const User = require("../models/users");
+const Animal = require("../models/animals");
 const {checkBody} = require("../modules/checkBody");
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
@@ -37,7 +38,9 @@ router.post('/signin', (req,res) => {
     return;
   }
 
-  User.findOne({ email: req.body.email }).then(data => {
+  User.findOne({ email: req.body.email }).populate('animal')
+  .then(data => {
+    console.log(data)
     if (data && bcrypt.compareSync(req.body.password, data.password)) { //bcrypt.compareSync sert à comparer le mdp crypté avec celui rentré en dur lors de la connexion
       res.json({ result: true, user: data });
     } else {
