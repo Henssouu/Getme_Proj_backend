@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 const User = require("../models/users");
-const Animal = require("../models/animals");
 const {checkBody} = require("../modules/checkBody");
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const uniqid = require('uniqid');
+
 
 /* GET users listing. */
 router.post('/signup', (req,res) => {
@@ -57,7 +60,7 @@ router.post('/:token', (req,res) => {
   User.updateOne(
     {token: req.params.token},
   
-      {nom: req.body.nom, prenom: req.body.prenom, pseudo: req.body.pseudo, adresse: req.body.adresse}
+      {nom: req.body.nom, prenom: req.body.prenom, pseudo: req.body.pseudo, adresse: req.body.adresse, photo: req.body.photo}
    
     )
     .then(() => {
@@ -65,6 +68,49 @@ router.post('/:token', (req,res) => {
 
       });
   });
+
+
+
+router.post('/userimage/upload', async (req,res) => {
+  console.log("backou", req.files.photoFromFront)
+ 
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+  
+  
+  if(!resultMove) {
+    console.log("envoi à cloudy")
+  const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+  fs.unlinkSync(photoPath);
+    res.json({ result: true, url: resultCloudinary.secure_url});      
+  } else {
+    res.json({ result: false, error: resultCopy });
+  }
+
+ });
+
+ router.post('/animalimage/upload', async (req,res) => {
+  console.log("animou", req.files.photoFromFront)
+ 
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+  
+  
+  if(!resultMove) {
+    console.log("envoi à cloudy")
+  const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+  fs.unlinkSync(photoPath);
+    res.json({ result: true, url: resultCloudinary.secure_url});      
+  } else {
+    res.json({ result: false, error: resultCopy });
+  }
+
+ });
+ 
+ 
+
+ 
+
 
 
 
