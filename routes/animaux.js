@@ -20,7 +20,8 @@ router.post('/newanimal', (req,res) => {
                 castré: req.body.castré,
                 tatouage: req.body.tatouage,
                 puce: req.body.puce,
-                description: req.body.description,     
+                description: req.body.description,
+                animalPhoto : req.body.animalPhoto,     
               });
               newAnimal.save().then((data) => {
                 // Récupérez l'ID de l'animal nouvellement créé
