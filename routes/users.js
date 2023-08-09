@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const User = require("../models/users");
-const Animal = require("../models/animals");
 const WantedNotice = require("../models/wantedNotice");
 const { checkBody } = require("../modules/checkBody");
 const uid2 = require('uid2');
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const uniqid = require('uniqid');
+
 const fetch = require('node-fetch');
 
 
@@ -76,11 +79,11 @@ router.post('/:token', (req, res) => {
     return;
   }
 
-  const { nom, prenom, pseudo, adresse, latitude, longitude } = req.body;
+  const { nom, prenom, pseudo, adresse, latitude, longitude, photo } = req.body;
 
   User.updateOne(
     { token: req.params.token },
-    { nom, prenom, pseudo, adresse, latitude, longitude }
+    { nom, prenom, pseudo, adresse, latitude, longitude, photo }
   )
     .then((data) => {
       if (data) {
@@ -95,8 +98,48 @@ router.post('/:token', (req, res) => {
     });
 });
 
-router.get('/messages/:token', async (req, res) => {
+
+
+router.post('/userimage/upload', async (req,res) => {
+  console.log("backou", req.files.photoFromFront)
+ 
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+  
+  
+  if(!resultMove) {
+    console.log("envoi à cloudy")
+  const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+  fs.unlinkSync(photoPath);
+    res.json({ result: true, url: resultCloudinary.secure_url});      
+  } else {
+    res.json({ result: false, error: resultCopy });
+  }
+
+ });
+
+ router.post('/animalimage/upload', async (req,res) => {
+  console.log("animou", req.files.photoFromFront)
+ 
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+  
+  
+  if(!resultMove) {
+    console.log("envoi à cloudy")
+  const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+  fs.unlinkSync(photoPath);
+    res.json({ result: true, url: resultCloudinary.secure_url});      
+  } else {
+    res.json({ result: false, error: resultCopy });
+  }
+
+ });
+ 
+ 
+ router.get('/messages/:token', async (req, res) => {
   try {
+
     const user = await User.findOne({ token: req.params.token });
 
     if (user) {
@@ -116,5 +159,14 @@ router.get('/messages/:token', async (req, res) => {
     res.json({ result: false, error: 'Error fetching user data' });
   }
 });
+
+
+
+
+
+
+    
+
+
 
 module.exports = router;

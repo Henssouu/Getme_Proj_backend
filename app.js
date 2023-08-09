@@ -10,10 +10,12 @@ var usersRouter = require('./routes/users');
 var animauxRouter = require('./routes/animaux');
 const messageRouter = require('./routes/messages');
 const wantedNoticesRouter = require('./routes/wantedNotice');
-
+var postsRouter = require('./routes/posts');
 var app = express();
 const cors = require('cors');
 app.use(cors());
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,5 +28,6 @@ app.use('/users', usersRouter);
 app.use('/animaux', animauxRouter);
 app.use('/api/messages', messageRouter);
 app.use('/api/wanted-notices', wantedNoticesRouter);
+app.use('/posts', postsRouter);
 
 module.exports = app;
