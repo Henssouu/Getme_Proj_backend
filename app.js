@@ -8,6 +8,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var animauxRouter = require('./routes/animaux');
+const messageRouter = require('./routes/messages');
+const wantedNoticesRouter = require('./routes/wantedNotice');
 
 var app = express();
 const cors = require('cors');
@@ -22,5 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/animaux', animauxRouter);
+app.use('/api/messages', messageRouter);
+app.use('/api/wanted-notices', wantedNoticesRouter);
 
 module.exports = app;

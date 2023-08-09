@@ -13,8 +13,6 @@ castré: String,
 tatouage: String,
 puce: String,
 description: String,
-
-
 });
 
 const Animal = mongoose.model('animals', animalsSchema);
