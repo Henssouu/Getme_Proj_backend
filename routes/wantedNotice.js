@@ -5,13 +5,19 @@ const User = require("../models/users")
 const { checkBody } = require('../modules/checkBody');
 
 router.post('/', (req, res) => {
-  if (!checkBody(req.body, ['type', 'photo', 'taille', 'couleur', 'poil', 'sexe', 'description', 'reward', 'latitude', 'longitude'])) {
+  if (!checkBody(req.body, ['type', 'taille', 'couleur', 'poil'])) {
     return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+
   const newNotice = new WantedNotice({
     type: req.body.type,
-    photo: req.body.photo,
+    wantedNoticePhoto: req.body.wantedNoticePhoto,
     taille: req.body.taille,
     couleur: req.body.couleur,
     poil: req.body.poil,
@@ -19,13 +25,15 @@ router.post('/', (req, res) => {
     description: req.body.description,
     reward: req.body.reward,
     latitude: req.body.latitude,
-    longitude: req.body.longitude
+    longitude: req.body.longitude,
+    author: user._id,
   });
 
 
   newNotice.save().then((data) => {
     // Récupérez l'ID de la wanted Notice nouvellement créé
     const noticeId = data._id;
+
     console.log('id notice', noticeId)
 
 
@@ -67,7 +75,39 @@ router.get('/all/:token', (req, res) => {
         console.error('Error fetching wanted notices:', error);
         res.json({ result: false, error: 'Error fetching wanted notices' });
       });
+    });
   });
 });
+
+router.delete('/', (req, res) => {
+  if (!checkBody(req.body, ['token', 'noticeId'])) {
+    res.json({ result: false, error: 'Missing or empty fields' });
+    return;
+  }
+
+  User.findOne({ token: req.body.token }).then(user => {
+    if (user === null) {
+      res.json({ result: false, error: 'User not found' });
+      return;
+    }
+
+    WantedNotice.findById(req.body.noticeId)
+      .populate('author')
+      .then(notice => {
+        if (!notice) {
+          res.json({ result: false, error: 'Notice not found' });
+          return;
+        } else if (String(notice.author._id) !== String(user._id)) { // On transforme les ObjectID en String car JS ne peux pas comparer deux objets.
+          res.json({ result: false, error: 'Notice can only be deleted by its author' });
+          return;
+        }
+
+        WantedNotice.deleteOne({ _id: notice._id }).then(() => {
+          res.json({ result: true });
+        });
+      });
+  });
+});
+
 
 module.exports = router;

@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const wantedNoticeSchema = mongoose.Schema({
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
     type: String,
-    photo: String,
+    wantedNoticePhoto: String,
     taille: String,
     couleur: String,
     poil: String,
