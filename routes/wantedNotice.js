@@ -66,7 +66,7 @@ router.get('/all/:token', (req, res) => {
     WantedNotice.find({
       latitude: { $gte: minLatitude, $lte: maxLatitude },
       longitude: { $gte: minLongitude, $lte: maxLongitude }
-    })
+    }).populate('author', ['pseudo'])
       .then(data => {
         console.log(data);
         res.json({ result: true, data });
