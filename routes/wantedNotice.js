@@ -53,16 +53,27 @@ router.post('/', (req, res) => {
 
 router.get('/all/:token', (req, res) => {
   User.findOne({ token: req.params.token }).then(user => {
-    if (user === null) {
+    if (!user) {
       res.json({ result: false, error: 'User not found' });
       return;
     }
 
-    WantedNotice.find() 
-      // .populate('wantednotices')
+    const minLatitude = req.query.minLatitude;
+    const maxLatitude = req.query.maxLatitude;
+    const minLongitude = req.query.minLongitude;
+    const maxLongitude = req.query.maxLongitude;
+
+    WantedNotice.find({
+      latitude: { $gte: minLatitude, $lte: maxLatitude },
+      longitude: { $gte: minLongitude, $lte: maxLongitude }
+    })
       .then(data => {
-        console.log(data)
+        console.log(data);
         res.json({ result: true, data });
+      })
+      .catch(error => {
+        console.error('Error fetching wanted notices:', error);
+        res.json({ result: false, error: 'Error fetching wanted notices' });
       });
     });
   });
