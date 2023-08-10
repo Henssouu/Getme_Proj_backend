@@ -46,7 +46,7 @@ router.post('/signin', (req, res) => {
     return;
   }
 
-  User.findOne({ email: req.body.email }).populate('messages').populate('wantedNotice')
+  User.findOne({ email: req.body.email }).populate('messages').populate('wantedNotice').populate('animal')
     .then(data => {
       if (data && bcrypt.compareSync(req.body.password, data.password)) {
         res.json({ result: true, user: data });
@@ -160,7 +160,24 @@ router.post('/userimage/upload', async (req,res) => {
   }
 });
 
+router.post('/wantedNoticeImage/upload', async (req,res) => {
+  console.log("wantedNotice", req.files.photoFromFront)
+ 
+  const photoPath = `./tmp/${uniqid()}.jpg`;
+  const resultMove = await req.files.photoFromFront.mv(photoPath);
+  
+  
+  if(!resultMove) {
+    console.log("envoi à cloudy")
+  const resultCloudinary = await cloudinary.uploader.upload(photoPath);
+  fs.unlinkSync(photoPath);
+    res.json({ result: true, url: resultCloudinary.secure_url});      
+  } else {
+    res.json({ result: false, error: resultCopy });
+  }
 
+ });
+ 
 
 
 
