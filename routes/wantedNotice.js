@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
     return res.json({ result: false, error: 'Missing or empty fields' });
   }
 
-  User.findOne({ token: req.body.token }).then(user => {
+ User.findOne({ token: req.body.token }).then(user => {
     if (user === null) {
       res.json({ result: false, error: 'User not found' });
       return;
@@ -49,9 +49,11 @@ router.post('/', (req, res) => {
      ).then(data => { console.log("apres update", data)}) // 
     res.json({ result: true, wantedNotice: data });
   });
+})
 });
 
 router.get('/all/:token', (req, res) => {
+  console.log("coucou la route")
   User.findOne({ token: req.params.token }).then(user => {
     if (!user) {
       res.json({ result: false, error: 'User not found' });
@@ -77,7 +79,6 @@ router.get('/all/:token', (req, res) => {
       });
     });
   });
-});
 
 router.delete('/', (req, res) => {
   if (!checkBody(req.body, ['token', 'noticeId'])) {
