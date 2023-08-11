@@ -1,34 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const Message = require('../models/messages'); 
+const Message = require('../models/messages');
+const User = require('../models/users'); 
 
 
 router.post('/send-message', async (req, res) => {
     const { sender, receiver, content } = req.body;
   
     try {
-      // Create a new message
+      // Creer un nouveau message
       const message = new Message({
         sender,
         receiver,
         content,
       });
   
-      // Save the message to the database
+      // enregistre le message dans la base de donnée
       await message.save();
   
-      res.status(201).json({ message: 'Message sent successfully.' });
+      res.status(201).json({ message: 'message envoyé avec succès.' });
     } catch (error) {
       console.error('Error sending message:', error);
       res.status(500).json({ error: 'An error occurred while sending the message.' });
     }
   });
 
-  router.get('/get-messages/:userId', async (req, res) => {
-    const userId = req.params.userId;
+  router.get('/get-messages/:token', async (req, res) => {
+    const token = req.params.token;
+
+    const userFound = await User.findOne({token: token})
+    const userId = userFound._id
   
     try {
-      // Find all messages where the user is either the sender or the receiver
+      // trouve tout les messages ou l'utilisateur est l'expéditeur ou le destinataire
       const messages = await Message.find({
         $or: [{ sender: userId }, { receiver: userId }],
       })
