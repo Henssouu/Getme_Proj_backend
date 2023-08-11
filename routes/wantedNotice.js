@@ -53,7 +53,6 @@ router.post('/', (req, res) => {
 });
 
 router.get('/all/:token', (req, res) => {
-  console.log("coucou la route")
   User.findOne({ token: req.params.token }).then(user => {
     if (!user) {
       res.json({ result: false, error: 'User not found' });
@@ -70,7 +69,7 @@ router.get('/all/:token', (req, res) => {
       longitude: { $gte: minLongitude, $lte: maxLongitude }
     }).populate('author', ['pseudo'])
       .then(data => {
-        console.log(data);
+        console.log('populate', data);
         res.json({ result: true, data });
       })
       .catch(error => {
