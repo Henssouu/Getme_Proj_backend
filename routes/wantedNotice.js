@@ -48,7 +48,8 @@ router.post('/', (req, res) => {
         { $push: {wantedNotice: noticeId } },
      ).then(data => { console.log("apres update", data)}) // 
     res.json({ result: true, wantedNotice: data });
-  });
+ 
+});
 });
 
 router.get('/all/:token', (req, res) => {
